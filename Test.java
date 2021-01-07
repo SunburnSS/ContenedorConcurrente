@@ -4,11 +4,13 @@ public class Test {
 
         Contenedor contenedor = new Contenedor();
 
-        Brazo brazoA = new Brazo(contenedor);
-        Brazo brazoB = new Brazo(contenedor);
+        Brazo brazoA = new Brazo(contenedor, "A", 5);
+        Brazo brazoB = new Brazo(contenedor, "B", 5);
 
         brazoA.start();
         brazoB.start();
+
+        
 
     }
 }
