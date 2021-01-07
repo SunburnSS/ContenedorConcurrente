@@ -1,34 +1,27 @@
+
 public class Contenedor {
-    private int numeroObjetos;
 
-    public Contenedor(){
-        this.numeroObjetos=5;
-    }
-
+    public int numeroObjetos;
+    public boolean Bandera = true;
+    public boolean[] banderas;
+    public int turno;
+    
     public Contenedor(int numeroObjetos){
-        this.numeroObjetos=numeroObjetos;
+        this.numeroObjetos = numeroObjetos;
+        this.banderas=new boolean[2];
+        this.banderas[0]=false;
+        this.banderas[1]=false;
+        this.turno=0;
     }
 
-    //Region critica
-    //Implementación de la exclusión mutua
-    public synchronized boolean descargar(Brazo brazo){
-        if(this.numeroObjetos>0){
-
-            try{
-                Thread.sleep( (long) (Math.random()*3000));
-            }catch(InterruptedException ex){
-                System.out.println(ex.getMessage());
-            }
-            
-            System.out.println("El brazo "+brazo.getID() + " descarga la pieza "+ this.numeroObjetos + " faltan " + (this.numeroObjetos=this.numeroObjetos-1) + " por descargar");
-
-
-            
-
-            return true;
+    public void descargarUnaPieza() throws InterruptedException{ 
+        if( numeroObjetos == 0){
+            System.out.println("Se ha descargado por completo el contenedor.");
+            System.exit(0);
         }else{
-            return false;
+            numeroObjetos--;
         }
-
+        Thread.sleep(200);
+        
     }
 }
