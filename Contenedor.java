@@ -2,26 +2,22 @@
 public class Contenedor {
 
     public int numeroObjetos;
-    public boolean Bandera = true;
-    public boolean[] banderas;
-    public int turno;
+    public volatile boolean[] bandera;
+    public volatile int turno;
     
     public Contenedor(int numeroObjetos){
         this.numeroObjetos = numeroObjetos;
-        this.banderas=new boolean[2];
-        this.banderas[0]=false;
-        this.banderas[1]=false;
-        this.turno=0;
+        this.bandera=new boolean[2];
+        this.bandera[0]=false;
+        this.bandera[1]=false;
     }
 
-    public void descargarUnaPieza() throws InterruptedException{ 
-        if( numeroObjetos == 0){
-            System.out.println("Se ha descargado por completo el contenedor.");
-            System.exit(0);
-        }else{
-            numeroObjetos--;
-        }
-        Thread.sleep(200);
-        
+    public void descargarUnaPieza() { 
+
+
+        this.numeroObjetos--;
+
     }
+
+
 }
