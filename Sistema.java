@@ -7,8 +7,8 @@ public class Sistema {
         int a = 50;
         Contenedor contenedor = new Contenedor(a);
 
-        Brazo brazoA = new Brazo(contenedor);
-        Brazo brazoB = new Brazo(contenedor);
+        Brazo brazoA = new Brazo(contenedor, 0);
+        Brazo brazoB = new Brazo(contenedor, 1);
         
         brazoA.start();
         brazoB.start();

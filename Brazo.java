@@ -12,60 +12,69 @@ public class Brazo extends Thread{
     public int id;
     public int totalPiezas;
     
-    public Brazo(Contenedor contenedor) throws IOException{
+    public Brazo(Contenedor contenedor, int id) throws IOException{
         this.contenedor = contenedor;
-       
+        this.id=id;
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Ingrese el id: ");
-        String ide = br.readLine(); 
-        this.id = Integer.parseInt(ide);
-        //System.out.println("Ingrese el total de piezas a tomar por el brazo "+id+": ");
-        //String piezas = br.readLine(); 
-        //this.totalPiezas = Integer.parseInt(piezas);
+        // System.out.println("Ingrese el id: ");
+        // String ide = br.readLine(); 
+        // this.id = Integer.parseInt(ide);
+        System.out.println("Ingrese el total de piezas a tomar por el brazo "+id+": ");
+        String piezas = br.readLine(); 
+        this.totalPiezas = Integer.parseInt(piezas);
     }
     
     public void run() {
-        int descargas = 0; // Total de descargas que lleva el brazo actual
-        while( descargas <= totalPiezas ){ 
-            try {
-                //Inicio exclusión mutua
-                int j; 
-                do{
-                    contenedor.banderas[this.id]=true;
-                   
-                    if(this.id==0){
-                        contenedor.turno=1;
-                        j=1;
-                    }
-                    else{
-                        contenedor.turno=0;
-                        j=0;
-                    }
-
-                    while(contenedor.banderas[j] && contenedor.turno==j){//El id de los brazo necesariamente es 0 y 1
-
-                        contenedor.descargarUnaPieza();
-
-                        descargas++;
+        int descargas=0;
+        for(int i=0; i<totalPiezas; i++){
+            contenedor.bandera[this.id] = true;
             
-                        System.out.println("Brazo "+id+" descarga pieza "+descargas+" Faltan: "+contenedor.numeroObjetos);
-                    }
+            int j=1000;
 
-                    contenedor.banderas[this.id]=false;
-                    
-                   
-                }while(contenedor.numeroObjetos != 0);
-                //contenedor.Bandera = true;
-                //Thread.sleep(500);
-                //Final exclusión mutua
-            } catch (InterruptedException ex) {
-                System.out.println("Falló al descargar el contenedor.");
+            //System.out.println("Hilo intentando entrar a seccion critica: " +this.id);
+
+            if(this.id==0){
+                contenedor.turno=1;
+                j=1;
             }
+            else{
+                contenedor.turno=0;
+                j=0;
+            }
+
+            while(contenedor.bandera[j] && contenedor.turno==j){
+                //No hace nada
+            }//El id de los brazo necesariamente es 0 y 1
             
+            //seccion critica            
+
+            try{
+                Thread.sleep( 0 );
+            }catch(InterruptedException ex){
+                System.out.println(ex.getMessage());
+            }
+
+            contenedor.descargarUnaPieza();
+            descargas++;
+            System.out.print("Brazo "+id);
+            System.out.print(" descargas "+descargas);
+            System.out.print(" total piezas "+ totalPiezas);
+            System.out.print(" descarga "+contenedor.numeroObjetos);
+            System.out.println("");
+
+            
+<<<<<<< HEAD
         }
         if(contenedor.numeroObjetos != 0){
             System.out.println("El contenedor aún tiene: "+contenedor.numeroObjetos+" piezas.");
         }
         System.out.println("Brazo "+id+" ha finalizado.");
+=======
+
+            contenedor.bandera[this.id]=false;
+            //fin de la sección critica
+        }        
+
+>>>>>>> 97f2a74690d870c3ec940975991cf8bfa37dc20f
     }
 }
