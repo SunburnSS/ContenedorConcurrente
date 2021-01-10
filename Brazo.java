@@ -63,18 +63,11 @@ public class Brazo extends Thread{
             System.out.println("");
 
             
-<<<<<<< HEAD
         }
         if(contenedor.numeroObjetos != 0){
-            System.out.println("El contenedor aún tiene: "+contenedor.numeroObjetos+" piezas.");
+            System.out.println("El contenedor aun tiene: "+contenedor.numeroObjetos+" piezas.");
         }
         System.out.println("Brazo "+id+" ha finalizado.");
-=======
-
-            contenedor.bandera[this.id]=false;
-            //fin de la sección critica
-        }        
-
->>>>>>> 97f2a74690d870c3ec940975991cf8bfa37dc20f
+        System.exit(0);
     }
 }
