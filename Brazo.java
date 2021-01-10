@@ -66,6 +66,6 @@ public class Brazo extends Thread{
         if(contenedor.numeroObjetos != 0){
             System.out.println("El contenedor aún tiene: "+contenedor.numeroObjetos+" piezas.");
         }
-        System.out.println("Brazo "+id+" ha finaliado.");
+        System.out.println("Brazo "+id+" ha finalizado.");
     }
 }
