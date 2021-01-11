@@ -6,7 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class Brazo extends Thread{
+public class Brazo implements Runnable{
     
     private Contenedor contenedor;
     public int id;
@@ -54,7 +54,7 @@ public class Brazo extends Thread{
                 System.out.print("Brazo "+id);
                 System.out.print(" descarga pieza numero "+descargas);
                 //System.out.print(". Total piezas a descargar: "+ totalPiezas);
-                System.out.print(". Piezas restandes "+contenedor.numeroObjetos);
+                System.out.print(". Piezas restantes "+contenedor.numeroObjetos);
                 System.out.println("");
             }else{
                 System.out.println("El contenedor esta vacio.");

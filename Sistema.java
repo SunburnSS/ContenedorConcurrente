@@ -13,10 +13,10 @@ public class Sistema {
 
         Contenedor contenedor = new Contenedor(a);
 
-        Brazo brazoA = new Brazo(contenedor, 0);
-        Brazo brazoB = new Brazo(contenedor, 1);
+        Runnable brazoA = new Brazo(contenedor, 0);
+        Runnable brazoB = new Brazo(contenedor, 1);
         
-        brazoA.start();
-        brazoB.start();
+        new Thread(brazoA).start();
+        new Thread(brazoB).start();
     }
 }
