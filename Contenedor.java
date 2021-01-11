@@ -13,11 +13,6 @@ public class Contenedor {
     }
 
     public void descargarUnaPieza() { 
-
-
         this.numeroObjetos--;
-
     }
-
-
 }
