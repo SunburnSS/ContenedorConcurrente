@@ -26,13 +26,10 @@ public class Brazo extends Thread{
     
     public void run() {
         int descargas=0;
-        for(int i=0; i<totalPiezas; i++){
+        for(int i=0; i < totalPiezas; i++){
             contenedor.bandera[this.id] = true;
-            
             int j=1000;
-
             //System.out.println("Hilo intentando entrar a seccion critica: " +this.id);
-
             if(this.id==0){
                 contenedor.turno=1;
                 j=1;
@@ -41,33 +38,33 @@ public class Brazo extends Thread{
                 contenedor.turno=0;
                 j=0;
             }
-
             while(contenedor.bandera[j] && contenedor.turno==j){
                 //No hace nada
-            }//El id de los brazo necesariamente es 0 y 1
-            
+            }//El id de los brazo necesariamente es 0 y 1      
             //seccion critica            
-
             try{
-                Thread.sleep( 0 );
+                Thread.sleep( 400 );
             }catch(InterruptedException ex){
                 System.out.println(ex.getMessage());
             }
 
-            contenedor.descargarUnaPieza();
-            descargas++;
-            System.out.print("Brazo "+id);
-            System.out.print(" descargas "+descargas);
-            System.out.print(" total piezas "+ totalPiezas);
-            System.out.print(" descarga "+contenedor.numeroObjetos);
-            System.out.println("");
-
-            
-        }
-        if(contenedor.numeroObjetos != 0){
+            if(contenedor.numeroObjetos > 0){ //Evita que el brazo siga descargando cuando el contenedor esté vacío
+                contenedor.descargarUnaPieza();
+                descargas++;
+                System.out.print("Brazo "+id);
+                System.out.print(" descarga pieza numero "+descargas);
+                //System.out.print(". Total piezas a descargar: "+ totalPiezas);
+                System.out.print(". Piezas restandes "+contenedor.numeroObjetos);
+                System.out.println("");
+            }else{
+                System.out.println("El contenedor esta vacio.");
+                System.exit(0);
+            }   
+            contenedor.bandera[this.id] = false;  
+        }    
+        if(contenedor.numeroObjetos > 0){
             System.out.println("El contenedor aun tiene: "+contenedor.numeroObjetos+" piezas.");
         }
         System.out.println("Brazo "+id+" ha finalizado.");
-        System.exit(0);
     }
 }
