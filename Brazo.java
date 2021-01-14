@@ -8,32 +8,20 @@ import java.util.logging.Logger;
 
 public class Brazo implements Runnable{
     
-    private Contenedor[] contenedores;
     private Contenedor contenedor;
     public int id;
-    private int idContenedor;
     public int totalPiezas;
     
-    public Brazo(Contenedor[] contenedores, int id) throws IOException{
-        this.contenedores=contenedores;
-
-
-        
+    public Brazo(Contenedor contenedor, int id) throws IOException{
+        this.contenedor = contenedor;
         this.id=id;
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         // System.out.println("Ingrese el id: ");
         // String ide = br.readLine(); 
         // this.id = Integer.parseInt(ide);
-
-        System.out.println("Ingrese el id del contenedor a tomar por el brazo "+id+": ");
-        String idContenedor = br.readLine(); 
-        this.contenedor = obtenerContenedor(contenedores, Integer.parseInt(idContenedor));
-
         System.out.println("Ingrese el total de piezas a tomar por el brazo "+id+": ");
         String piezas = br.readLine(); 
         this.totalPiezas = Integer.parseInt(piezas);
-
-        
     }
     
     public void run() {
@@ -61,30 +49,24 @@ public class Brazo implements Runnable{
             }
 
             if(contenedor.numeroObjetos > 0){ //Evita que el brazo siga descargando cuando el contenedor esté vacío
-                contenedor.descargarUnaPieza();
-                descargas++;
-                System.out.println("Brazo "+id + " descarga pieza numero "+descargas + ". Piezas restantes "+contenedor.numeroObjetos);
-            }else{
                 
+                descargas++;
+                System.out.print("Brazo "+id);
+                System.out.print(" descarga pieza numero "+descargas);
+                //System.out.print(". Total piezas a descargar: "+ totalPiezas);
+                System.out.print(" de  "+contenedor.numeroObjetos);
+                System.out.print(" en el contenedor  ");
+                contenedor.descargarUnaPieza();
+                System.out.println("");
+            }else{
                 System.out.println("El contenedor esta vacio.");
-                i=totalPiezas;
-                //System.exit(0);
+                System.exit(0);
             }   
-            contenedor.bandera[this.id] = false;
-            //Fin de la sección critica
+            contenedor.bandera[this.id] = false;  
         }    
         if(contenedor.numeroObjetos > 0){
-            System.out.println("El contenedor aun tiene: "+contenedor.numeroObjetos+" piezas.");
+            //System.out.println("El contenedor aun tiene: "+contenedor.numeroObjetos+" piezas.");
         }
         System.out.println("Brazo "+id+" ha finalizado.");
-    }
-
-    private Contenedor obtenerContenedor(Contenedor[] contenedores, int id){
-        for(Contenedor contenedor : contenedores){
-            if(contenedor.getID() == id){
-                return contenedor;
-            }
-        }
-        return null;
     }
 }
