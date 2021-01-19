@@ -8,37 +8,56 @@ import java.util.logging.Logger;
 
 public class Brazo implements Runnable{
     
-    private Contenedor contenedor;
+    private Contenedor primerContenedor;
+    private Contenedor segundoContenedor;
     public int id;
-    public int totalPiezas;
+    public int numeroPiezasAMontar;
     
-    public Brazo(Contenedor contenedor, int id) throws IOException{
-        this.contenedor = contenedor;
+    public Brazo(Contenedor contenedorA, Contenedor contenedorB, int id) throws IOException{
+
+
         this.id=id;
+
+        if(this.id==0){
+            this.primerContenedor = contenedorA;
+            this.segundoContenedor = contenedorB;
+        }
+        else{
+            this.primerContenedor = contenedorB;
+            this.segundoContenedor = contenedorA;
+        }
+
+
+
+
+        
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         // System.out.println("Ingrese el id: ");
         // String ide = br.readLine(); 
         // this.id = Integer.parseInt(ide);
-        System.out.println("Ingrese el total de piezas a tomar por el brazo "+id+": ");
+        System.out.println("Ingrese el total de piezas a montar por el brazo "+id+": ");
         String piezas = br.readLine(); 
-        this.totalPiezas = Integer.parseInt(piezas);
+        this.numeroPiezasAMontar = Integer.parseInt(piezas);
     }
     
     public void run() {
-        int descargas=0;
-        for(int i=0; i < totalPiezas; i++){
-            contenedor.bandera[this.id] = true;
+        int montajes=0;
+        boolean bandera;
+
+
+        for(int i=0; i < numeroPiezasAMontar; i++){
+            this.primerContenedor.bandera[this.id] = true;
             int j=1000;
             //System.out.println("Hilo intentando entrar a seccion critica: " +this.id);
             if(this.id==0){
-                contenedor.turno=1;
+                this.primerContenedor.turno=1;
                 j=1;
             }
             else{
-                contenedor.turno=0;
+                this.primerContenedor.turno=0;
                 j=0;
             }
-            while(contenedor.bandera[j] && contenedor.turno==j){
+            while(this.primerContenedor.bandera[j] && this.primerContenedor.turno==j){
                 //No hace nada
             }//El id de los brazo necesariamente es 0 y 1      
             //seccion critica            
@@ -48,23 +67,56 @@ public class Brazo implements Runnable{
                 System.out.println(ex.getMessage());
             }
 
-            if(contenedor.numeroObjetos > 0){ //Evita que el brazo siga descargando cuando el contenedor esté vacío
-                
-                descargas++;
-                System.out.print("Brazo "+id);
-                System.out.print(" descarga pieza numero "+descargas);
-                //System.out.print(". Total piezas a descargar: "+ totalPiezas);
-                System.out.print(" de  "+contenedor.numeroObjetos);
-                System.out.print(" en el contenedor  ");
-                contenedor.descargarUnaPieza();
-                System.out.println("");
+            if(this.primerContenedor.numeroObjetos > 0){ //Evita que el brazo siga descargando cuando el contenedor esté vacío
+                System.out.println("Brazo "+id+": ha descargado una pieza del contenedor "+this.primerContenedor.id);
+                this.primerContenedor.descargarUnaPieza();
             }else{
-                System.out.println("El contenedor esta vacio.");
-                System.exit(0);
-            }   
-            contenedor.bandera[this.id] = false;  
+                System.out.println("El contenedor "+this.primerContenedor.id+" esta vacio.");
+                break;
+                //System.exit(0);
+            } 
+            //Fin de la seccion critica     
+            this.primerContenedor.bandera[this.id] = false;
+
+
+             //
+
+            this.segundoContenedor.bandera[this.id] = true;
+            
+            //System.out.println("Hilo intentando entrar a seccion critica: " +this.id);
+            if(this.id==0){
+                this.segundoContenedor.turno=1;
+                j=1;
+            }
+            else{
+                this.segundoContenedor.turno=0;
+                j=0;
+            }
+            while(this.segundoContenedor.bandera[j] && this.segundoContenedor.turno==j){
+                //No hace nada
+            }//El id de los brazo necesariamente es 0 y 1      
+            //seccion critica            
+            try{
+                Thread.sleep( 400 );
+            }catch(InterruptedException ex){
+                System.out.println(ex.getMessage());
+            }
+
+            if(this.segundoContenedor.numeroObjetos > 0){ //Evita que el brazo siga descargando cuando el contenedor esté vacío
+                System.out.println("Brazo "+id+": ha descargado una pieza del contenedor "+this.segundoContenedor.id);
+                this.segundoContenedor.descargarUnaPieza();
+
+            }else{
+                System.out.println("El contenedor "+this.segundoContenedor.id+" esta vacio.");
+                break;
+                //System.exit(0);
+            }
+            //Fin de la seccion critica   
+            this.segundoContenedor.bandera[this.id] = false;     
+            montajes++;
+            System.out.println("Brazo "+this.id+": ha montado su producto "+montajes+" de "+this.numeroPiezasAMontar);
         }    
-        if(contenedor.numeroObjetos > 0){
+        if(this.primerContenedor.numeroObjetos > 0){
             //System.out.println("El contenedor aun tiene: "+contenedor.numeroObjetos+" piezas.");
         }
         System.out.println("Brazo "+id+" ha finalizado.");
